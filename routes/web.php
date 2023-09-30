@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TransactionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +16,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//For Signup Page
+Route::get('/signup', [AuthController::class, 'showSignupForm'])->name('signup');
+Route::post('/signup', [AuthController::class, 'signup']);
+
+
+
+//For Login Page
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+//After Login Successfull
+Route::get('/profile', function () {
+    return 'Welcome to the dashboard!';
+})->middleware('auth');
+//
+Route::get('/create_transaction', [TransactionController::class, 'showCreateForm']);
+
+
+//for Psot /deposit & /withdrawal oparation do in here... 
+Route::post('/create_transaction', [TransactionController::class, 'processTransaction'])->name('process_transaction');
+
+
+
+Route::get('/',  [TransactionController::class, 'showAllTransactions']);
+
+Route::get('/deposit',  [TransactionController::class, 'showDepositedTransactions']);
+//Route::post('/deposit',  [TransactionController::class, 'processDeposit']);
+
+Route::get('/withdrawal',  [TransactionController::class, 'showWithdrawalTransactions']);
+//Route::post('/withdrawal', [TransactionController::class, 'processWithdrawal']);
+
