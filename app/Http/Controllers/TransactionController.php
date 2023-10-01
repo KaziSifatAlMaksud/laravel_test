@@ -36,6 +36,7 @@ class TransactionController extends Controller
                         $user = User::where('id', $request->user_id)->first();
                         $user->balance += $request->amount; 
                         $user->save();
+                        session(['balance' => $user->balance]);
                     }
                     Transaction::create([
                         'user_id' => $request->user_id,

@@ -27,9 +27,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
 //After Login Successfull
-Route::get('/profile', function () {
-    return 'Welcome to the dashboard!';
-})->middleware('auth');
+Route::get('/dashbord', function () {
+    return view("dashbord");
+});
 //
 Route::get('/create_transaction', [TransactionController::class, 'showCreateForm']);
 
