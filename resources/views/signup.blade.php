@@ -25,10 +25,13 @@
         <label>Name:</label><br>
         <input type="text" name="name" placeholder="Name">
         <br>
+        <label>User Name:</label><br>
+        <input type="text" name="username" placeholder="Janh10" ><br>
         <label>Account Type:</label><br>
-            <input type="text" name="account_type" value="business" required/><br/>
+        <input type="radio" name="account_type" value="individual" required>Individual<br>
+        <input type="radio" name="account_type" value="business" required >Business<br>   
         <label>Balance:</label><br>
-        <input type="text" name="balance" value="00" ><br>
+        <input type="number" name="balance" placeholder="100" ><br>
         <label>Email:</label><br>
         <input type="email" name="email" placeholder="Email"><br>
         <label>Password:</label><br>

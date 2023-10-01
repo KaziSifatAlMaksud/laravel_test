@@ -13,7 +13,12 @@ class TransactionController extends Controller
     //create transection
                 public function showCreateForm()
             {
-                return view('create_transaction');
+                if (session('email')) {
+                    return view('create_transaction');
+                } else {
+                    return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
+                }
+              
             }
 
             public function processTransaction(Request $request)
@@ -27,6 +32,11 @@ class TransactionController extends Controller
                 ]);
 
                 if ($request->transaction_type == 'deposit') {
+                    if (session('user_id')) {                        
+                        $user = User::where('id', $request->user_id)->first();
+                        $user->balance += $request->amount; 
+                        $user->save();
+                    }
                     Transaction::create([
                         'user_id' => $request->user_id,
                         'transaction_type' => $request->transaction_type,
@@ -34,10 +44,12 @@ class TransactionController extends Controller
                         'fee' => $request->fee,
                         'date' => $request->date,
                     ]);
+
+                
     
                     return redirect('/')->with('success', 'Transaction deposited successfully');
 
-                } elseif ($request->action == 'withdrawal') {
+                } elseif ($request->transaction_type == 'withdrawal') {
                     
                         $accountType = $request->account_type; 
                     
@@ -110,17 +122,28 @@ class TransactionController extends Controller
     public function showAllTransactions()
     {
         // Get all transactions and current balance
-        $transactions = Transaction::all();
-        $balance = User::sum('balance');
+        if (session('email')) {
+            $transactions = Transaction::all();
+            $balance = User::sum('balance');
+            return view('transactions', compact('transactions'));
+        } else {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
+        }
+       
 
-        return view('transactions', compact('transactions'));
+        
     }
 
     public function showDepositedTransactions()
     {
-        // Get deposited transactions
-        $transactions = Transaction::where('transaction_type', 'deposit')->get();
-        return view('transactions', compact('transactions'));
+        if (session('email')) {
+            // Get deposited transactions
+            $transactions = Transaction::where('transaction_type', 'deposit')->get();
+            return view('transactions', compact('transactions'));
+        } else {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
+        }
+        
     }
 
 
@@ -128,8 +151,13 @@ class TransactionController extends Controller
     public function showWithdrawalTransactions()
     {
         // Get withdrawal transactions
-        $transactions = Transaction::where('transaction_type', 'withdrawal')->get();
-        return view('transactions', compact('transactions'));
+        if (session('email')) {
+            $transactions = Transaction::where('transaction_type', 'withdrawal')->get();
+            return view('transactions', compact('transactions'));
+        } else {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
+        }
+        
     }
 
    

@@ -28,10 +28,11 @@
         <input type="password" name="password" placeholder="Password"><br/> <br/>
         <button type="submit">Login</button><br/>
         <p>Need To Create a Account <a href="{{ route('signup') }}">Sign Up</a></p>
+        @if(session('error'))
+        <div>{{ session('error') }}</div>
+        @endif
     </form>
    
-    @if(session('error'))
-        <div>{{ session('error') }}</div>
-    @endif
+ 
 </body>
 </html>

@@ -39,6 +39,7 @@ Route::post('/create_transaction', [TransactionController::class, 'processTransa
 
 
 
+
 Route::get('/',  [TransactionController::class, 'showAllTransactions']);
 
 Route::get('/deposit',  [TransactionController::class, 'showDepositedTransactions']);

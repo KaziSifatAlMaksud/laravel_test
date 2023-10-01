@@ -28,8 +28,19 @@
 <body>
     @php
     $totalbalance = 0;
-    @endphp
 
+
+    @endphp
+    
+   
+    @if (session("status") == "logged_in")
+    <h1>Welcome {{ session('user_id') }}</h1>
+    <h1>Welcome {{ session('name') }}</h1>
+    <h1>Welcome {{ session('email') }}</h1>
+    <h1>Welcome {{ session('balance') }}</h1>
+    <h1>Welcome {{ session('account_type') }}</h1>
+    <h1>Welcome {{ session('created_at') }}</h1> 
+    @endif
     <h1>All Transactions</h1>
     <br/>
     <br/>
@@ -59,7 +70,7 @@
         
     </table>
 
-    <h2>Current Balance: {!! $totalbalance !!}</h2>
-    <button> Create Transactions</button>
+    <h2> Balance: {!! $totalbalance !!}</h2>
+   
 </body>
 </html>
