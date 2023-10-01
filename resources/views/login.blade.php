@@ -1,5 +1,3 @@
-@extends('layouts.main')
-@section('main-container')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+  <title>Pages / Not Found 404 - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -31,10 +29,10 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+
 </head>
 
 <body>
-
 
 <main>
     <div class="container">
@@ -100,10 +98,7 @@
                 </div>
               </div>
 
-              <div class="credits">
-           
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-              </div>
+          
 
             </div>
           </div>
