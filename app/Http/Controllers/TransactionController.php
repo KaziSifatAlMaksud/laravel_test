@@ -28,7 +28,7 @@ class TransactionController extends Controller
                     'transaction_type' => 'required',
                     'amount' => 'required',
                     'fee' => 'required',
-                    'date' => 'required',
+                    'ref' => 'required',
                 ]);
 
                 if ($request->transaction_type == 'deposit') {
@@ -43,7 +43,7 @@ class TransactionController extends Controller
                         'transaction_type' => $request->transaction_type,
                         'amount' => $request->amount,
                         'fee' => $request->fee,
-                        'date' => $request->date,
+                        'ref' => $request->ref,
                     ]);
 
                 
@@ -62,7 +62,7 @@ class TransactionController extends Controller
                             'transaction_type' => $request->transaction_type,
                             'amount' => $request->amount,
                             'fee' => $withdrawalFee,
-                            'date' => $request->date,
+                            'ref' => $request->ref,
                         ]);
                     
                         return redirect('/')->with('success', 'Transaction deposited successfully');

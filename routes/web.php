@@ -30,7 +30,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/dashbord', function () {
     return view("dashbord");
 });
-//
+
 Route::get('/create_transaction', [TransactionController::class, 'showCreateForm']);
 
 

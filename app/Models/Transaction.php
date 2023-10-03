@@ -14,14 +14,14 @@ class Transaction extends Model
     ];
 
     // Define a method to create a new transaction
-    public static function createTransaction($user_id, $transaction_type, $amount, $fee, $date)
+    public static function createTransaction($user_id, $transaction_type, $amount, $fee, $ref)
     {
         return self::create([
             'user_id' => $user_id,
             'transaction_type' => $transaction_type,
             'amount' => $amount,
             'fee' => $fee,
-            'date' => $date,
+            'ref' => $ref,
         ]);
     }
 

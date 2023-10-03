@@ -239,8 +239,13 @@
         </a>
       </li><!-- End Dashboard Nav -->
 
-
-
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{{url('/create_transaction')}}">
+          <i class="bi bi-card-list"></i>
+          <span>Create Transection</span>
+        </a>
+      </li><!-- End Register Page Nav -->
+     
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-journal-text"></i><span>Transection</span><i class="bi bi-chevron-down ms-auto"></i>
