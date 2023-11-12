@@ -25,6 +25,7 @@ Route::post('/signup', [AuthController::class, 'signup']);
 //For Login Page
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //After Login Successfull
 Route::get('/dashbord', function () {

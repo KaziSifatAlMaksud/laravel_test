@@ -70,4 +70,13 @@ class AuthController extends Controller
         }
     }
     
+    //logout Contoller...
+
+        public function logout(Request $request)
+    {
+        $request->session()->flush();
+        return redirect()->route('login')->with('error', 'Invalid credentials');;
+    }
+
+    
 }
