@@ -1,123 +1,137 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-
-
+use App\Mail\SendMail;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
+
+    public function mail()
+    {
+        return view('send_mail');
+    }
+    public function sendMail(Request $request)
+    {
+        $data = $request->all();
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $address = $request->input('address');
+        $city = $request->input('city');
+
+        Mail::to($email)->send(new SendMail($data, $email, $password, $address, $city));
+        return "Mail send successfully";
+    }
     //create transection
-                public function showCreateForm()
-            {
-                if (session('email')) {
-                    return view('create_transaction');
-                } else {
-                    return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
-                }
-              
+    public function showCreateForm()
+    {
+        if (session('email')) {
+            return view('create_transaction');
+        } else {
+            return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
+        }
+    }
+
+    public function processTransaction(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'transaction_type' => 'required',
+            'amount' => 'required',
+            'fee' => 'required',
+            'ref' => 'required',
+        ]);
+
+        if ($request->transaction_type == 'deposit') {
+            if (session('user_id')) {
+                $user = User::where('id', $request->user_id)->first();
+                $user->balance += $request->amount;
+                $user->save();
+                session(['balance' => $user->balance]);
             }
-
-            public function processTransaction(Request $request)
-            {
-                $request->validate([
-                    'user_id' => 'required',
-                    'transaction_type' => 'required',
-                    'amount' => 'required',
-                    'fee' => 'required',
-                    'ref' => 'required',
-                ]);
-
-                if ($request->transaction_type == 'deposit') {
-                    if (session('user_id')) {                        
-                        $user = User::where('id', $request->user_id)->first();
-                        $user->balance += $request->amount; 
-                        $user->save();
-                        session(['balance' => $user->balance]);
-                    }
-                    Transaction::create([
-                        'user_id' => $request->user_id,
-                        'transaction_type' => $request->transaction_type,
-                        'amount' => $request->amount,
-                        'fee' => $request->fee,
-                        'ref' => $request->ref,
-                    ]);
-
-                
-    
-                    return redirect('/')->with('success', 'Transaction deposited successfully');
-
-                } elseif ($request->transaction_type == 'withdrawal') {
-                    
-                        $accountType = $request->account_type; 
-                    
-                      
-                        $withdrawalFee = $request->amount * 0.015;
-                    
-                        Transaction::create([
-                            'user_id' => $request->user_id,
-                            'transaction_type' => $request->transaction_type,
-                            'amount' => $request->amount,
-                            'fee' => $withdrawalFee,
-                            'ref' => $request->ref,
-                        ]);
-                    
-                        return redirect('/')->with('success', 'Transaction deposited successfully');
-                    }
-                    
-
-                        // $withdrawalAmount = $request->amount;
-                        // $accountType = $request->account_type;
+            Transaction::create([
+                'user_id' => $request->user_id,
+                'transaction_type' => $request->transaction_type,
+                'amount' => $request->amount,
+                'fee' => $request->fee,
+                'ref' => $request->ref,
+            ]);
 
 
-                        
-                        // // Apply appropriate withdrawal rate based on account type
-                        // $withdrawalRate = ($accountType == 'individual') ? 0.015 : 0.025;
-                        // $withdrawalFee = $withdrawalAmount * $withdrawalRate;
 
-                        // // Implement free withdrawal conditions for Individual accounts
-                        // if ($accountType == 'individual') {
-                            
-                        //     if (date('N') == 5 && $withdrawalAmount <= 1000) {
-                        //         $withdrawalFee = 0;
-                        //     }
+            return redirect('/')->with('success', 'Transaction deposited successfully');
+        } elseif ($request->transaction_type == 'withdrawal') {
 
-                            
-                        //     if ($withdrawalAmount <= 5000) {
-                        //         $withdrawalFee = 0;
-                        //     }
+            $accountType = $request->account_type;
 
-                        //     // Check if the withdrawal amount is within the free limit
-                        //     if ($withdrawalAmount <= 1000) {
-                        //         $withdrawalFee = 0;
-                        //     }
-                        // }
 
-                       
-                        // if ($accountType == 'Business') {
-                          
-                            
-                                // $withdrawalFee = $withdrawalAmount * 0.015;
-                                // Transaction::create([
-                                //     'user_id' => $request->user_id,
-                                //     'transaction_type' => $request->transaction_type,
-                                //     'amount' => $request->amount,
-                                //     'fee' => $withdrawalFee,
-                                //     'date' => $request->date,
-                                // ]);
-                 
-                                // return redirect('/')->with('success', 'Transaction deposited successfully');
-                            
-                      //  }
+            $withdrawalFee = $request->amount * 0.015;
 
-                   
-                
+            Transaction::create([
+                'user_id' => $request->user_id,
+                'transaction_type' => $request->transaction_type,
+                'amount' => $request->amount,
+                'fee' => $withdrawalFee,
+                'ref' => $request->ref,
+            ]);
 
-               
-            }
+            return redirect('/')->with('success', 'Transaction deposited successfully');
+        }
+
+
+        // $withdrawalAmount = $request->amount;
+        // $accountType = $request->account_type;
+
+
+
+        // // Apply appropriate withdrawal rate based on account type
+        // $withdrawalRate = ($accountType == 'individual') ? 0.015 : 0.025;
+        // $withdrawalFee = $withdrawalAmount * $withdrawalRate;
+
+        // // Implement free withdrawal conditions for Individual accounts
+        // if ($accountType == 'individual') {
+
+        //     if (date('N') == 5 && $withdrawalAmount <= 1000) {
+        //         $withdrawalFee = 0;
+        //     }
+
+
+        //     if ($withdrawalAmount <= 5000) {
+        //         $withdrawalFee = 0;
+        //     }
+
+        //     // Check if the withdrawal amount is within the free limit
+        //     if ($withdrawalAmount <= 1000) {
+        //         $withdrawalFee = 0;
+        //     }
+        // }
+
+
+        // if ($accountType == 'Business') {
+
+
+        // $withdrawalFee = $withdrawalAmount * 0.015;
+        // Transaction::create([
+        //     'user_id' => $request->user_id,
+        //     'transaction_type' => $request->transaction_type,
+        //     'amount' => $request->amount,
+        //     'fee' => $withdrawalFee,
+        //     'date' => $request->date,
+        // ]);
+
+        // return redirect('/')->with('success', 'Transaction deposited successfully');
+
+        //  }
+
+
+
+
+
+    }
 
 
     public function showAllTransactions()
@@ -130,9 +144,6 @@ class TransactionController extends Controller
         } else {
             return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
         }
-       
-
-        
     }
 
     public function showDepositedTransactions()
@@ -144,7 +155,6 @@ class TransactionController extends Controller
         } else {
             return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
         }
-        
     }
 
 
@@ -158,8 +168,5 @@ class TransactionController extends Controller
         } else {
             return redirect()->route('login')->with('error', 'You must be logged in to create a transaction.');
         }
-        
     }
-
-   
 }

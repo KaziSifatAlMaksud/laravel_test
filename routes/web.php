@@ -38,7 +38,8 @@ Route::get('/create_transaction', [TransactionController::class, 'showCreateForm
 //for Psot /deposit & /withdrawal oparation do in here... 
 Route::post('/create_transaction', [TransactionController::class, 'processTransaction'])->name('process_transaction');
 
-
+Route::get('/mail', [TransactionController::class, 'mail'])->name('mail');
+Route::post('/send/mail', [TransactionController::class, 'sendMail'])->name('mail.send');
 
 
 Route::get('/',  [TransactionController::class, 'showAllTransactions']);
@@ -48,4 +49,3 @@ Route::get('/deposit',  [TransactionController::class, 'showDepositedTransaction
 
 Route::get('/withdrawal',  [TransactionController::class, 'showWithdrawalTransactions']);
 //Route::post('/withdrawal', [TransactionController::class, 'processWithdrawal']);
-
